@@ -1,0 +1,6 @@
+{
+  "name": "chatbot-pro",
+  "version": "1.0.0",
+  "description": "Simple chatbot with Vercel serverless API",
+  "type": "module"
+}
