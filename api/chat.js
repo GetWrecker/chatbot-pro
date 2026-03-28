@@ -1,5 +1,4 @@
-module.exports = function handler(req, res) {}
-
+export default async function handler(req, res) {
   if (req.method !== "POST") {
     return res.status(405).json({ reply: "Method not allowed" });
   }
@@ -11,40 +10,39 @@ module.exports = function handler(req, res) {}
   }
 
   try {
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-  method: "POST",
-  headers: {
-    "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    model: "gpt-4o",
-    messages: [
-      {
-        role: "system",
-        content: `
-You are a friendly and natural assistant.
-Respond like a real human, similar to ChatGPT.
-Keep responses conversational, helpful, and slightly informal.
-        `
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
       },
-      {
-        role: "user",
-        content: message
-      }
-    ]
-  })
-});
+      body: JSON.stringify({
+        model: "gpt-4o",
+        input: `
+You are a portfolio assistant for Paul Carandang.
+
+You help visitors understand:
+- His skills
+- His projects
+- His experience
+
+Speak naturally, like ChatGPT. Be helpful and friendly.
+
+User: ${message}
+        `
+      })
+    });
 
     const data = await response.json();
 
     const reply =
-      data?.choices?.[0]?.message?.content || "No response from AI.";
+      data.output?.[0]?.content?.[0]?.text ||
+      "Sorry, I couldn't respond.";
 
     res.status(200).json({ reply });
 
   } catch (error) {
     console.error(error);
-    res.status(500).json({ reply: "Error getting response." });
+    res.status(500).json({ reply: "Server error." });
   }
 }
