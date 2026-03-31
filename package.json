@@ -1,5 +1,12 @@
 {
   "name": "chatbot-pro",
   "version": "1.0.0",
-  "type": "module"
+  "main": "api/chat.js",
+  "scripts": {
+    "start": "node api/chat.js"
+  },
+  "dependencies": {
+    "openai": "^4.0.0",
+    "dotenv": "^16.0.0"
+  }
 }
