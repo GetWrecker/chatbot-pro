@@ -1,22 +1,14 @@
 const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
-const sendBtn = document.getElementById('send-btn');
-
-function handleEnter(e) {
-    if (e.key === 'Enter') sendMessage();
-}
 
 async function sendMessage() {
     const text = userInput.value.trim();
     if (!text) return;
 
-    // Add User Message
-    addMessage(text, 'user');
+    appendMessage(text, 'user');
     userInput.value = '';
-    
-    // Show Loading state
-    sendBtn.disabled = true;
-    const loadingDiv = addMessage('Thinking...', 'bot');
+
+    const loadingMsg = appendMessage('...', 'bot');
 
     try {
         const response = await fetch('/api/chat', {
@@ -26,16 +18,16 @@ async function sendMessage() {
         });
         
         const data = await response.json();
-        loadingDiv.innerText = data.reply;
+        
+        // Fix for "undefined" - Check if reply exists, else show error
+        loadingMsg.innerText = data.reply || "I couldn't process that. Please try again.";
     } catch (error) {
-        loadingDiv.innerText = "Connection error. Please check your deployment settings.";
-    } finally {
-        sendBtn.disabled = false;
-        chatBox.scrollTop = chatBox.scrollHeight;
+        loadingMsg.innerText = "Error: Check your Vercel logs and API key.";
     }
+    chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-function addMessage(text, sender) {
+function appendMessage(text, sender) {
     const div = document.createElement('div');
     div.className = `message ${sender}`;
     div.innerText = text;
@@ -43,3 +35,7 @@ function addMessage(text, sender) {
     chatBox.scrollTop = chatBox.scrollHeight;
     return div;
 }
+
+function handleEnter(e) { if (e.key === 'Enter') sendMessage(); }
+window.handleEnter = handleEnter;
+window.sendMessage = sendMessage;
