@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paul Adriano | AI Assistant</title>
+    <title>Paul Adriano | Portfolio Bot</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,17 +11,15 @@
         <header>
             <div class="status-dot"></div>
             <h1>Paul's Assistant</h1>
-            <p>Portfolio AI Specialist</p>
         </header>
         <div id="chat-box">
-            <div class="message bot">Hello! I'm Paul's AI Assistant. Ask me about his education, skills, or professional experience!</div>
+            <div class="message bot">Hello! I'm Paul's AI Assistant. How can I help you today?</div>
         </div>
         <div class="input-area">
-            <input type="text" id="user-input" placeholder="Type a message..." onkeypress="handleEnter(event)">
-            <button onclick="sendMessage()" id="send-btn">Send</button>
+            <input type="text" id="user-input" placeholder="Ask about Paul..." onkeypress="handleEnter(event)">
+            <button onclick="sendMessage()">Send</button>
         </div>
     </div>
-    <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
