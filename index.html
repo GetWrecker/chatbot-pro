@@ -1,31 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat Assistant</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paul Adriano | AI Assistant</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div class="chat-app">
-  <div class="chat-header">
-    <div class="avatar"></div>
-    <div>
-      <h3>Assistant</h3>
-      <span>Active now</span>
+    <div class="chat-container">
+        <header>
+            <div class="status-dot"></div>
+            <h1>Paul's Assistant</h1>
+            <p>Portfolio AI Specialist</p>
+        </header>
+        <div id="chat-box">
+            <div class="message bot">Hello! I'm Paul's AI Assistant. Ask me about his education, skills, or professional experience!</div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Type a message..." onkeypress="handleEnter(event)">
+            <button onclick="sendMessage()" id="send-btn">Send</button>
+        </div>
     </div>
-  </div>
-
-  <div id="chatBox" class="chat-box"></div>
-
-  <form id="chatForm" class="chat-input">
-    <input type="text" id="userInput" placeholder="Type a message..." required>
-    <button type="submit">➤</button>
-  </form>
-</div>
-
-<script src="config.js"></script>
-<script src="script.js"></script>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
