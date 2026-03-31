@@ -6,7 +6,6 @@
     "start": "node api/chat.js"
   },
   "dependencies": {
-    "openai": "^4.0.0",
-    "dotenv": "^16.0.0"
+    "openai": "^4.0.0"
   }
 }
