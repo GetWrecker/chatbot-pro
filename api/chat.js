@@ -6,41 +6,19 @@ const openai = new OpenAI({
 });
 
 module.exports = async (req, res) => {
-  // Handle CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const { message } = req.body;
-
-  // Age Calculation
   const birthDate = new Date(PAUL_DATA.dob);
-  const age = Math.floor((new Date() - birthDate) / (365.25 * 24 * 60 * 60 * 1000));
+  const age = Math.floor((new Date() - birthDate) / (31557600000));
 
-  const systemPrompt = `
-    You are the AI Portfolio Assistant for ${PAUL_DATA.fullName}.
-    
-    PERSONAL INFO:
-    - Name: ${PAUL_DATA.fullName}
-    - Age: ${age}
-    - Roles: ${PAUL_DATA.roles.join(", ")}
-    - Education: College: ${PAUL_DATA.education.college}, HS: ${PAUL_DATA.education.highSchool}, Elem: ${PAUL_DATA.education.elementary}
-    - Experience: ${PAUL_DATA.experience}
-    - Skills: Support (${PAUL_DATA.skills.support.join(", ")}), Tech (${PAUL_DATA.skills.tech.join(", ")}), Creative (${PAUL_DATA.skills.creative.join(", ")})
-    - Health: ${PAUL_DATA.healthStatus}
-    - Hobby: ${PAUL_DATA.hobby}
-    - Strengths: ${PAUL_DATA.capabilities.join(", ")}
-
-    INSTRUCTIONS:
-    1. Answer questions based ONLY on the data above. 
-    2. If someone asks for information not listed here, respond with: "That information is either confidential or outside the scope of my current knowledge regarding Paul."
-    3. Be professional, concise, and helpful.
-  `;
+  const systemPrompt = `You are the AI Assistant for ${PAUL_DATA.fullName}. 
+  Info: Age ${age}, Education: ${PAUL_DATA.education.college}, Roles: ${PAUL_DATA.roles.join(", ")}, 
+  Skills: ${PAUL_DATA.skills}, Experience: ${PAUL_DATA.experience}, Hobby: ${PAUL_DATA.hobby}, 
+  Health: ${PAUL_DATA.healthStatus}. 
+  If the info is not here, say it is confidential or not about Paul. Be brief.`;
 
   try {
     const completion = await openai.chat.completions.create({
@@ -51,8 +29,9 @@ module.exports = async (req, res) => {
       ],
     });
 
-    res.status(200).json({ reply: completion.choices[0].message.content });
+    const aiReply = completion.choices[0].message.content;
+    res.status(200).json({ reply: aiReply });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ reply: "I'm having trouble connecting. Please check your API Key." });
   }
 };
